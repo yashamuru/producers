@@ -3,6 +3,7 @@
 namespace ProducerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Webmozart\Assert\Assert;
 
 /**
  * Artist
@@ -12,6 +13,18 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Artist
 {
+    public static function createFromParameters(
+        $name,
+        $instrument
+    ) {
+        Assert::string($name);
+        Assert::string($instrument);
+
+        $artist = new self();
+        $artist->setName($name)->setInstrument($instrument);
+        return $artist;
+    }
+
     /**
      * @var int
      *
@@ -46,9 +59,10 @@ class Artist
     /**
      * @param int $id
      */
-    public function setId(int $id)
+    public function setId(int $id): Artist
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
@@ -62,9 +76,10 @@ class Artist
     /**
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): Artist
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -78,8 +93,9 @@ class Artist
     /**
      * @param string $instrument
      */
-    public function setInstrument(string $instrument)
+    public function setInstrument(string $instrument): Artist
     {
         $this->instrument = $instrument;
+        return $this;
     }
 }

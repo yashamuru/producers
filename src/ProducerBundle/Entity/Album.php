@@ -64,9 +64,10 @@ class Album
     /**
      * @param int $id
      */
-    public function setId(int $id)
+    public function setId(int $id): Album
     {
         $this->id = $id;
+        return $this;
     }
 
     /**

@@ -57,12 +57,14 @@ class AlbumController extends Controller
         $res = [];
         foreach($albums as $album)
         {
-            /** @var Album $album */
-            $res[] = [
-                'id' => $album->getId(),
-                'name' => $album->getName(),
-                'datePublished'=> $album->getDatePublished()->format('Y-m-d')
-            ];
+            if ($album) {
+                /** @var Album $album */
+                $res[] = [
+                    'id' => $album->getId(),
+                    'name' => $album->getName(),
+                    'datePublished'=> $album->getDatePublished()->format('Y-m-d')
+                ];
+            }
         }
         return new JsonResponse($res);
     }
