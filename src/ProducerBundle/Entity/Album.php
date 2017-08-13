@@ -5,12 +5,12 @@ namespace ProducerBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Artist
+ * Album
  *
- * @ORM\Table(name="artist")
- * @ORM\Entity(repositoryClass="ProducerBundle\Repository\ArtistRepository")
+ * @ORM\Table(name="album")
+ * @ORM\Entity(repositoryClass="ProducerBundle\Repository\AlbumRepository")
  */
-class Artist
+class Album
 {
     /**
      * @var int
@@ -29,11 +29,11 @@ class Artist
     private $name;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="instrument", type="string", length=255)
+     * @ORM\Column(name="date_published", type="datetime")
      */
-    private $instrument;
+    private $datePublished;
 
     /**
      * @return int
@@ -68,18 +68,18 @@ class Artist
     }
 
     /**
-     * @return string
+     * @return \DateTime
      */
-    public function getInstrument(): string
+    public function getDatePublished(): \DateTime
     {
-        return $this->instrument;
+        return $this->datePublished;
     }
 
     /**
-     * @param string $instrument
+     * @param \DateTime $datePublished
      */
-    public function setInstrument(string $instrument)
+    public function setDatePublished(\DateTime $datePublished)
     {
-        $this->instrument = $instrument;
+        $this->datePublished = $datePublished;
     }
 }
