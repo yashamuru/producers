@@ -2,6 +2,7 @@
 
 namespace ProducerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
@@ -54,6 +55,15 @@ class Album
     private $datePublished;
 
     /**
+     * @ORM\OneToMany(targetEntity="AlbumParticipation", mappedBy="album", cascade={"all"})
+     */
+    private $participations;
+
+    public function __construct() {
+        $this->participations = new ArrayCollection();
+    }
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -101,6 +111,35 @@ class Album
     public function setDatePublished(\DateTime $datePublished)
     {
         $this->datePublished = $datePublished;
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getParticipations(): ArrayCollection
+    {
+        return $this->participations;
+    }
+
+    public function clearParticipations()
+    {
+        $this->participations->clear();
+        return $this;
+    }
+
+    public function addParticipation(AlbumParticipation $participation)
+    {
+        if (!$this->participations->contains($participation)) {
+            $this->participations->add($participation);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipation(AlbumParticipation $participation)
+    {
+        $this->participations->removeElement($participation);
         return $this;
     }
 }

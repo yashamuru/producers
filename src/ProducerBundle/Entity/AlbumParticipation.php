@@ -2,7 +2,9 @@
 
 namespace ProducerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use ProducerBundle\Repository\AlbumParticipationRepository;
 
 /**
  * AlbumParticipation
@@ -12,6 +14,22 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AlbumParticipation
 {
+
+    public static function createByParameters(
+        Album $album,
+        array $artists
+    ) {
+        $result = new ArrayCollection();
+        foreach($artists as $artist)
+        {
+            $participation = new self();
+            $participation->setAlbum($album)->setArtist($artist);
+
+            /** @var Artist $artist */
+            $result->add($participation);
+        }
+        return $result;
+    }
     /**
      * @var int
      *
@@ -22,7 +40,7 @@ class AlbumParticipation
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Album")
+     * @ORM\ManyToOne(targetEntity="Album", inversedBy="participations")
      * @ORM\JoinColumn(name="album_id", referencedColumnName="id")
      */
     private $album;
@@ -44,9 +62,10 @@ class AlbumParticipation
     /**
      * @param int $id
      */
-    public function setId(int $id)
+    public function setId(int $id): AlbumParticipation
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
@@ -60,9 +79,10 @@ class AlbumParticipation
     /**
      * @param mixed $album
      */
-    public function setAlbum($album)
+    public function setAlbum($album): AlbumParticipation
     {
         $this->album = $album;
+        return $this;
     }
 
     /**
@@ -76,8 +96,9 @@ class AlbumParticipation
     /**
      * @param mixed $artist
      */
-    public function setArtist($artist)
+    public function setArtist($artist): AlbumParticipation
     {
         $this->artist = $artist;
+        return $this;
     }
 }

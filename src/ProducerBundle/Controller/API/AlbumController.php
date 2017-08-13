@@ -2,7 +2,10 @@
 
 namespace ProducerBundle\Controller\API;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use ProducerBundle\Entity\Album;
+use ProducerBundle\Entity\AlbumParticipation;
+use ProducerBundle\Entity\Artist;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -47,6 +50,16 @@ class AlbumController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($album);
+
+        if (! empty($params['artists']))
+        {
+            $artists = $this->getDoctrine()->getRepository(Artist::class)
+                ->findBy(["id" => $params['artists']]);
+
+            $participations = AlbumParticipation::createByParameters($album, $artists);
+            $album->setParticipations($participations);
+        }
+
         $em->flush();
 
         return $this->respond([$album]);
@@ -77,6 +90,8 @@ class AlbumController extends Controller
     {
         $existingAlbum = $this->getDoctrine()->getRepository(Album::class)->find($id);
 
+        $em = $this->getDoctrine()->getManager();
+
         $params = json_decode($request->getContent(), true);
         $album = Album::createFromParameters(
             $params['name'] ?? null,
@@ -85,7 +100,21 @@ class AlbumController extends Controller
 
         $existingAlbum->setName($album->getName())->setDatePublished($album->getDatePublished());
 
-        $em = $this->getDoctrine()->getManager();
+        $existingAlbum->clearParticipations();
+        $em->persist($existingAlbum);
+
+        if (! empty($params['artists']))
+        {
+            $artists = $this->getDoctrine()->getRepository(Artist::class)
+                ->findBy(["id" => $params['artists']]);
+
+            $participations = AlbumParticipation::createByParameters($existingAlbum, $artists);
+            foreach($participations as $item) {
+                $existingAlbum->addParticipation($item);
+            }
+        }
+
+
         $em->persist($existingAlbum);
         $em->flush();
 
