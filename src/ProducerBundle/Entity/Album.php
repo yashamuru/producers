@@ -3,6 +3,7 @@
 namespace ProducerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Webmozart\Assert\Assert;
 
 /**
  * Album
@@ -12,6 +13,23 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Album
 {
+
+    public static function createFromParameters(
+        $name,
+        $datePublished
+    ) {
+        Assert::string($name);
+        $datePublished = new \DateTime($datePublished);
+        Assert::isInstanceOf(
+            $datePublished,
+            \DateTime::class,
+            "%s should be a valid DateTime");
+
+        $album = new self();
+        $album->setName($name)->setDatePublished($datePublished);
+        return $album;
+    }
+
     /**
      * @var int
      *
@@ -65,6 +83,7 @@ class Album
     public function setName(string $name)
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -81,5 +100,6 @@ class Album
     public function setDatePublished(\DateTime $datePublished)
     {
         $this->datePublished = $datePublished;
+        return $this;
     }
 }
