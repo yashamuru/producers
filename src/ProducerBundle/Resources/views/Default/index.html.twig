@@ -1,1 +1,37 @@
-Hello World!
+Welcome!
+
+<table id="albums">
+    <tr>
+        <th>Name</th>
+        <th>Date Publisher</th>
+        <th>Artists</th>
+        <th>Edit</th>
+        <th>Remove</th>
+    </tr>
+    <tr style="display:none"   id="js_album_tpl">
+        <td data-id="${id}">${name}</td>
+        <td>${datePublished}</td>
+        <td>${artists_text}</td>
+        <td></td>
+    </tr>
+</table>
+
+
+<table id="artists">
+    <tr>
+        <th>Name</th>
+        <th>Instrument</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    <tr style="display:none"  data-id="${id}" id="js_artists_tpl">
+        <td>${name}</td>
+        <td>${instrument}</td>
+        <td class="js_edit">Edit</td>
+        <td class="js_remove">Delete</td>
+    </tr>
+</table>
+
+<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+<script src="{{ asset('js/jquery.tmpl.min.js') }}"></script>
+<script src="{{ asset('js/producer-main.js') }}"></script>
