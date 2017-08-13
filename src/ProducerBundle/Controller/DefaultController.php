@@ -12,6 +12,7 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+        //$em = $this->getDoctrine()->getManager();
         return $this->render('ProducerBundle:Default:index.html.twig');
     }
 }
