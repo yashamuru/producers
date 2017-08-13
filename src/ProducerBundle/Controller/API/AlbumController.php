@@ -57,7 +57,10 @@ class AlbumController extends Controller
                 ->findBy(["id" => $params['artists']]);
 
             $participations = AlbumParticipation::createByParameters($album, $artists);
-            $album->setParticipations($participations);
+            foreach($participations as $item)
+            {
+                $album->addParticipation($item);
+            }
         }
 
         $em->flush();
@@ -75,7 +78,11 @@ class AlbumController extends Controller
                 $res[] = [
                     'id' => $album->getId(),
                     'name' => $album->getName(),
-                    'datePublished'=> $album->getDatePublished()->format('Y-m-d')
+                    'datePublished'=> $album->getDatePublished()->format('Y-m-d'),
+                    'artists' => array_map(function (AlbumParticipation $participation) {
+                        $artist = $participation->getArtist();
+                        return ['id'=> $artist->getId(), 'name' => $artist->getName(), 'instrument'=> $artist->getInstrument()];
+                    }, $album->getParticipations()->toArray())
                 ];
             }
         }

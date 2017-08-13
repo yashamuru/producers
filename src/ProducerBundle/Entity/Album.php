@@ -55,7 +55,7 @@ class Album
     private $datePublished;
 
     /**
-     * @ORM\OneToMany(targetEntity="AlbumParticipation", mappedBy="album", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AlbumParticipation", mappedBy="album", cascade={"all"}, orphanRemoval=true)
      */
     private $participations;
 
@@ -117,7 +117,7 @@ class Album
     /**
      * @return ArrayCollection
      */
-    public function getParticipations(): ArrayCollection
+    public function getParticipations()
     {
         return $this->participations;
     }

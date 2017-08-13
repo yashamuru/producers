@@ -30,6 +30,7 @@ class AlbumParticipation
         }
         return $result;
     }
+
     /**
      * @var int
      *
